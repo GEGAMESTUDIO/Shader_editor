@@ -9,6 +9,7 @@ var materals:ShaderMaterial
 @export var mesh3d:MeshInstance3D
 @export var th:Theme
 func _ready() -> void:
+	nodes[11].grab_focus()
 	shader = mesh2d.material.shader
 	code.text = shader.code
 	code.text_changed.connect(update_shader)
@@ -17,7 +18,8 @@ func _ready() -> void:
 	nodes[4].pressed.connect(get_tree().quit)
 	nodes[5].pressed.connect(_save_and_quit)
 	nodes[7].pressed.connect(save_quit)
-
+	auto_load()
+	update_shader()
 func _save_and_quit() -> void:nodes[8].show()
 func save_quit() -> void:
 	var path:String= OS.get_system_dir(OS.SYSTEM_DIR_DOCUMENTS)+"/Shaders/"
@@ -25,13 +27,19 @@ func save_quit() -> void:
 	if fname=="":fname = str(hash(randi()))
 	_save(path,fname)
 	get_tree().quit()
-
 func _save(path:String,fname:String) -> void:
 	DirAccess.make_dir_recursive_absolute(path)
 	var file:FileAccess=FileAccess.open(path+fname+".gdshader",FileAccess.WRITE)
 	file.store_string(code.text)
 	file.close()
-
+	nodes[13].hide()
+func auto_save() -> void:
+	var  file:FileAccess= FileAccess.open(OS.get_system_dir(OS.SYSTEM_DIR_DOCUMENTS)+"/Shaders/autosave.temp",FileAccess.WRITE)
+	file.store_string(code.text)
+func auto_load() -> void:
+	var  file:FileAccess= FileAccess.open(OS.get_system_dir(OS.SYSTEM_DIR_DOCUMENTS)+"/Shaders/autosave.temp",FileAccess.READ)
+	if FileAccess.file_exists(OS.get_system_dir(OS.SYSTEM_DIR_DOCUMENTS)+"/Shaders/autosave.temp"):
+		code.text = file.get_as_text()
 func _window_requsted(window:String) -> void:
 	for w in nodes[1].get_children():
 		if w.name==window:w.show()
@@ -42,14 +50,13 @@ func _window_requsted(window:String) -> void:
 		_update_list()
 	if window == "Parameters":
 		create_parameters(mesh2d.material)
-		$fps2.text = str(shader.get_shader_uniform_list())
-
 func _on_exit_fullscreen_pressed() -> void:
+	nodes[12].grab_focus()
 	nodes[0].show()
 	nodes[1].show()
 	nodes[2].hide()
-
 func _on_fullscreen_pressed() -> void:
+	nodes[2].grab_focus()
 	nodes[0].hide()
 	nodes[1].hide()
 	nodes[2].show()
@@ -70,7 +77,6 @@ func _update_list():
 		btn.text = n
 		btn.pressed.connect(current_selection.bind(btn))
 		nodes[9].add_child(btn)
-
 func current_selection(btn:Button):
 	var file:FileAccess=FileAccess.open(OS.get_system_dir(OS.SYSTEM_DIR_DOCUMENTS)+"/Shaders/"+btn.text,FileAccess.READ)
 	code.text = file.get_as_text()
@@ -81,12 +87,19 @@ func current_selection_ex(btn:Button):
 	code.text = file.get_as_text()
 	shader.code = file.get_as_text()
 	update_shader()
-
 func update_shader() -> void:
 	shader.code = code.text
 	if shader.get_mode() == Shader.MODE_CANVAS_ITEM:
+		mesh2d.show()
+		%v3d.hide()
 		mesh2d.material.shader = shader
 		materals = mesh2d.material
+	if shader.get_mode() == Shader.MODE_SPATIAL:
+		%v3d.show()
+		mesh2d.hide()
+		mesh3d.material_override.shader = shader
+		materals = mesh3d.material_override
+	auto_save()
 func create_parameters(mat:ShaderMaterial)-> void:
 	for c in nodes[10].get_children():
 		c.queue_free()
@@ -164,3 +177,42 @@ func float_changed(val:float,nam:String,mat:ShaderMaterial,vl:Label):
 	mat.set_shader_parameter(nam,val)
 func color_changed(col:Color,nam:String,mat:ShaderMaterial):
 	mat.set_shader_parameter(nam,col)
+
+
+func _font_size_changed(value: float) -> void:
+	code.add_theme_font_size_override("font_size",int(value))
+
+
+func _on_wrap_toggled(toggled: bool) -> void:
+	code.wrap_mode = TextEdit.LINE_WRAPPING_BOUNDARY if toggled else TextEdit.LINE_WRAPPING_NONE
+
+
+func _on_save_pressed() -> void:
+	nodes[13].show()
+	nodes[13].get_child(0).get_child(1).pressed.connect(manual_save)
+func manual_save():
+	_save(OS.get_system_dir(OS.SYSTEM_DIR_DOCUMENTS)+"/Shaders/",nodes[14].text)
+
+
+func _on_export_image() -> void:
+	subview.stretch=false
+	view.size = Vector2(nodes[15].value,nodes[16].value)
+	await RenderingServer.frame_post_draw
+	view.get_texture().get_image().save_png(OS.get_system_dir(OS.SYSTEM_DIR_PICTURES)+"/"+str(hash(randi()))+".png")
+	subview.stretch=true
+
+
+func _on_transparent_toggled(toggled: bool) -> void:
+	view.transparent_bg=toggled
+
+
+func _on_fps_toggled(toggled: bool) -> void:
+	$fps.visible = toggled
+
+
+func _on_scale_changed(value: float) -> void:
+	subview.stretch_shrink=int(value)
+
+
+func _on_bg_color_changed(col: Color) -> void:
+	color=col

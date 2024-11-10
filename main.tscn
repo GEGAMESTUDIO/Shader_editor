@@ -1,4 +1,4 @@
-[gd_scene load_steps=25 format=3 uid="uid://ddcf62f87nau2"]
+[gd_scene load_steps=27 format=3 uid="uid://ddcf62f87nau2"]
 
 [ext_resource type="Shader" path="res://Examples/default.gdshader" id="1_26e3s"]
 [ext_resource type="Script" path="res://main.gd" id="1_jbs8t"]
@@ -13,6 +13,7 @@
 [ext_resource type="Texture2D" uid="uid://ctesp7r7mhc5y" path="res://Resources/close.svg" id="9_05v23"]
 [ext_resource type="Texture2D" uid="uid://biu5jjclt1e67" path="res://Resources/save_file.svg" id="11_tmwx0"]
 [ext_resource type="Script" path="res://code.gd" id="12_14cvk"]
+[ext_resource type="Texture2D" uid="uid://b687sw0oublw2" path="res://Resources/check_ok.svg" id="14_wtxx2"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_5xkug"]
 bg_color = Color(1, 1, 1, 1)
@@ -42,6 +43,10 @@ tonemap_mode = 2
 
 [sub_resource type="SphereMesh" id="SphereMesh_1al7f"]
 
+[sub_resource type="StyleBoxLine" id="StyleBoxLine_x5xd2"]
+color = Color(0.326422, 0.532406, 1, 1)
+thickness = 2
+
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_0te51"]
 bg_color = Color(0.101961, 0.101961, 0.101961, 0.419608)
 border_width_left = 2
@@ -53,8 +58,8 @@ corner_radius_top_right = 16
 corner_radius_bottom_right = 16
 corner_radius_bottom_left = 16
 
-[sub_resource type="StyleBoxLine" id="StyleBoxLine_pgxlb"]
-color = Color(0.0588235, 0.764706, 0.764706, 1)
+[sub_resource type="StyleBoxLine" id="StyleBoxLine_s70eo"]
+color = Color(0.326422, 0.532406, 1, 1)
 thickness = 2
 
 [sub_resource type="CodeHighlighter" id="CodeHighlighter_k0wjd"]
@@ -71,14 +76,14 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-color = Color(0.0962047, 0.0962048, 0.0962047, 1)
+color = Color(0.0705882, 0.0392157, 0.0235294, 1)
 script = ExtResource("1_jbs8t")
-nodes = [NodePath("split/viewControl/controlMargin"), NodePath("split/windows"), NodePath("split/viewControl/viewMargin/round/exitFullscreen"), NodePath("split/windows/Quit/round/vbox/cancel"), NodePath("split/windows/Quit/round/vbox/quit"), NodePath("split/windows/Quit/round/vbox/savenquit"), NodePath("split/windows/Quit/round/Panel/name"), NodePath("split/windows/Quit/round/Panel/name/save"), NodePath("split/windows/Quit/round/Panel"), NodePath("split/windows/Load/round/scroll/list"), NodePath("split/windows/Parameters/round/scroll/paramlist")]
+nodes = [NodePath("split/viewControl/controlMargin"), NodePath("split/windows"), NodePath("split/viewControl/viewMargin/round/exitFullscreen"), NodePath("split/windows/Quit/round/vbox/cancel"), NodePath("split/windows/Quit/round/vbox/quit"), NodePath("split/windows/Quit/round/vbox/savenquit"), NodePath("split/windows/Quit/round/Panel/name"), NodePath("split/windows/Quit/round/Panel/name/save"), NodePath("split/windows/Quit/round/Panel"), NodePath("split/windows/Load/round/scroll/list"), NodePath("split/windows/Parameters/round/scroll/paramlist"), NodePath("split/viewControl/controlMargin/round/controls/Edit"), NodePath("split/viewControl/controlMargin/round/controls/Fullscreen"), NodePath("split/windows/Settings/round/scroll/Control/fname"), NodePath("split/windows/Settings/round/scroll/Control/fname/hbox/nametext"), NodePath("split/windows/Settings/round/scroll/Control/settings/export/sizex"), NodePath("split/windows/Settings/round/scroll/Control/settings/export/sizey")]
 code = NodePath("split/windows/Code/round/CodeEdit")
 subview = NodePath("split/viewControl/viewMargin/round/subview")
 view = NodePath("split/viewControl/viewMargin/round/subview/view")
 mesh2d = NodePath("split/viewControl/viewMargin/round/subview/view/2d")
-mesh3d = NodePath("split/viewControl/viewMargin/round/subview/view/3d/MeshInstance3D")
+mesh3d = NodePath("split/viewControl/viewMargin/round/subview/view/v3d/MeshInstance3D")
 th = ExtResource("2_wrm6b")
 
 [node name="split" type="HSplitContainer" parent="."]
@@ -115,11 +120,10 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 stretch = true
-stretch_shrink = 2
 
 [node name="view" type="SubViewport" parent="split/viewControl/viewMargin/round/subview"]
 handle_input_locally = false
-size = Vector2i(309, 302)
+size = Vector2i(554, 532)
 render_target_update_mode = 4
 
 [node name="2d" type="ColorRect" parent="split/viewControl/viewMargin/round/subview/view"]
@@ -130,23 +134,24 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 
-[node name="3d" type="Node3D" parent="split/viewControl/viewMargin/round/subview/view"]
+[node name="v3d" type="Node3D" parent="split/viewControl/viewMargin/round/subview/view"]
+unique_name_in_owner = true
 visible = false
 
-[node name="DirectionalLight3D" type="DirectionalLight3D" parent="split/viewControl/viewMargin/round/subview/view/3d"]
+[node name="DirectionalLight3D" type="DirectionalLight3D" parent="split/viewControl/viewMargin/round/subview/view/v3d"]
 transform = Transform3D(-0.866025, -0.433013, 0.25, 0, 0.5, 0.866025, -0.5, 0.75, -0.433013, 0, 0, 0)
 shadow_enabled = true
 
-[node name="WorldEnvironment" type="WorldEnvironment" parent="split/viewControl/viewMargin/round/subview/view/3d"]
+[node name="WorldEnvironment" type="WorldEnvironment" parent="split/viewControl/viewMargin/round/subview/view/v3d"]
 environment = SubResource("Environment_msbsb")
 
-[node name="piviot" type="Node3D" parent="split/viewControl/viewMargin/round/subview/view/3d"]
+[node name="piviot" type="Node3D" parent="split/viewControl/viewMargin/round/subview/view/v3d"]
 script = ExtResource("2_dubkx")
 
-[node name="cam" type="Camera3D" parent="split/viewControl/viewMargin/round/subview/view/3d/piviot"]
+[node name="cam" type="Camera3D" parent="split/viewControl/viewMargin/round/subview/view/v3d/piviot"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 2.28452)
 
-[node name="MeshInstance3D" type="MeshInstance3D" parent="split/viewControl/viewMargin/round/subview/view/3d"]
+[node name="MeshInstance3D" type="MeshInstance3D" parent="split/viewControl/viewMargin/round/subview/view/v3d"]
 material_override = SubResource("ShaderMaterial_5lf6u")
 mesh = SubResource("SphereMesh_1al7f")
 
@@ -166,6 +171,7 @@ grow_horizontal = 0
 grow_vertical = 0
 theme_override_colors/icon_pressed_color = Color(0, 0.705882, 0.835294, 1)
 theme_override_colors/icon_hover_color = Color(0.612317, 0.915715, 1, 1)
+theme_override_styles/focus = SubResource("StyleBoxLine_x5xd2")
 icon = ExtResource("4_nqkp6")
 flat = true
 icon_alignment = 1
@@ -179,6 +185,7 @@ theme_override_constants/margin_right = 8
 theme_override_constants/margin_bottom = 8
 
 [node name="round" type="Panel" parent="split/viewControl/controlMargin"]
+clip_contents = true
 layout_mode = 2
 size_flags_vertical = 3
 theme_override_styles/panel = SubResource("StyleBoxFlat_0te51")
@@ -195,67 +202,96 @@ alignment = 1
 
 [node name="Edit" type="Button" parent="split/viewControl/controlMargin/round/controls"]
 layout_mode = 2
+focus_neighbor_left = NodePath("../Quit")
+focus_neighbor_right = NodePath("../Parameters")
+focus_next = NodePath("../Parameters")
+focus_previous = NodePath("../Quit")
 theme_override_colors/font_pressed_color = Color(0, 0, 0, 0)
 theme_override_colors/font_focus_color = Color(0, 0, 0, 0)
 theme_override_colors/font_color = Color(0, 0, 0, 0)
 theme_override_colors/icon_pressed_color = Color(0, 0.705882, 0.835294, 1)
 theme_override_colors/icon_hover_color = Color(0.612317, 0.915715, 1, 1)
-theme_override_styles/focus = SubResource("StyleBoxLine_pgxlb")
+theme_override_styles/focus = SubResource("StyleBoxLine_s70eo")
 icon = ExtResource("5_mvprh")
 flat = true
 icon_alignment = 1
 
 [node name="Parameters" type="Button" parent="split/viewControl/controlMargin/round/controls"]
 layout_mode = 2
+focus_neighbor_left = NodePath("../Edit")
+focus_neighbor_right = NodePath("../Load")
+focus_next = NodePath("../Load")
+focus_previous = NodePath("../Edit")
 theme_override_colors/font_pressed_color = Color(0, 0, 0, 0)
 theme_override_colors/font_focus_color = Color(0, 0, 0, 0)
 theme_override_colors/font_color = Color(0, 0, 0, 0)
 theme_override_colors/icon_pressed_color = Color(0, 0.705882, 0.835294, 1)
 theme_override_colors/icon_hover_color = Color(0.612317, 0.915715, 1, 1)
+theme_override_styles/focus = SubResource("StyleBoxLine_s70eo")
 icon = ExtResource("6_4d1lr")
 flat = true
 icon_alignment = 1
 
 [node name="Load" type="Button" parent="split/viewControl/controlMargin/round/controls"]
 layout_mode = 2
+focus_neighbor_left = NodePath("../Parameters")
+focus_neighbor_right = NodePath("../Settings")
+focus_next = NodePath("../Settings")
+focus_previous = NodePath("../Parameters")
 theme_override_colors/font_pressed_color = Color(0, 0, 0, 0)
 theme_override_colors/font_focus_color = Color(0, 0, 0, 0)
 theme_override_colors/font_color = Color(0, 0, 0, 0)
 theme_override_colors/icon_pressed_color = Color(0, 0.705882, 0.835294, 1)
 theme_override_colors/icon_hover_color = Color(0.612317, 0.915715, 1, 1)
+theme_override_styles/focus = SubResource("StyleBoxLine_s70eo")
 icon = ExtResource("7_l1uvt")
 flat = true
 icon_alignment = 1
 
 [node name="Settings" type="Button" parent="split/viewControl/controlMargin/round/controls"]
 layout_mode = 2
+focus_neighbor_left = NodePath("../Load")
+focus_neighbor_right = NodePath("../Fullscreen")
+focus_next = NodePath("../Fullscreen")
+focus_previous = NodePath("../Load")
 theme_override_colors/font_pressed_color = Color(0, 0, 0, 0)
 theme_override_colors/font_focus_color = Color(0, 0, 0, 0)
 theme_override_colors/font_color = Color(0, 0, 0, 0)
 theme_override_colors/icon_pressed_color = Color(0, 0.705882, 0.835294, 1)
 theme_override_colors/icon_hover_color = Color(0.612317, 0.915715, 1, 1)
+theme_override_styles/focus = SubResource("StyleBoxLine_s70eo")
 icon = ExtResource("8_lcixv")
 flat = true
 icon_alignment = 1
 
 [node name="Fullscreen" type="Button" parent="split/viewControl/controlMargin/round/controls"]
 layout_mode = 2
+focus_neighbor_left = NodePath("../Settings")
+focus_neighbor_right = NodePath("../Quit")
+focus_next = NodePath("../Quit")
+focus_previous = NodePath("../Settings")
 theme_override_colors/font_pressed_color = Color(0, 0, 0, 0)
 theme_override_colors/font_focus_color = Color(0, 0, 0, 0)
 theme_override_colors/font_color = Color(0, 0, 0, 0)
 theme_override_colors/icon_pressed_color = Color(0, 0.705882, 0.835294, 1)
 theme_override_colors/icon_hover_color = Color(0.612317, 0.915715, 1, 1)
+theme_override_styles/focus = SubResource("StyleBoxLine_s70eo")
 icon = ExtResource("8_aeam5")
 flat = true
 icon_alignment = 1
 
 [node name="Quit" type="Button" parent="split/viewControl/controlMargin/round/controls"]
 layout_mode = 2
+focus_neighbor_left = NodePath("../Fullscreen")
+focus_neighbor_right = NodePath("../Edit")
+focus_next = NodePath("../Edit")
+focus_previous = NodePath("../Fullscreen")
 theme_override_colors/font_pressed_color = Color(0, 0, 0, 0)
 theme_override_colors/font_focus_color = Color(0, 0, 0, 0)
 theme_override_colors/font_color = Color(0, 0, 0, 0)
 theme_override_colors/icon_pressed_color = Color(0, 0.705882, 0.835294, 1)
 theme_override_colors/icon_hover_color = Color(0.612317, 0.915715, 1, 1)
+theme_override_styles/focus = SubResource("StyleBoxLine_s70eo")
 icon = ExtResource("9_05v23")
 flat = true
 icon_alignment = 1
@@ -283,12 +319,15 @@ anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
 offset_left = 15.0
-offset_top = 10.0
-offset_right = -10.0
-offset_bottom = -8.0
+offset_top = 17.0
+offset_right = -15.0
+offset_bottom = -21.0
 grow_horizontal = 2
 grow_vertical = 2
+theme_override_font_sizes/font_size = 18
 placeholder_text = "hello world."
+autowrap_mode = 2
+indent_wrapped_lines = true
 scroll_smooth = true
 scroll_past_end_of_file = true
 caret_blink = true
@@ -303,7 +342,7 @@ auto_brace_completion_enabled = true
 auto_brace_completion_highlight_matching = true
 script = ExtResource("12_14cvk")
 keywords = PackedStringArray("uniform", "void", "shader_type", "vec2", "vec3", "vec4", "float", "source_color", "int", "bool", "float", "sin", "cos", "tan")
-vars = PackedStringArray("int", "float", "vec2", "vec3", "vec4", "bool", "void", "COLOR", "VERTEX", "ALBEDO", "NORMAL", "hint_range(0.0,1.0,0.001)", "sin", "cos", "tan", "uniform", "TIME", "UV", "SCREEN_UV", "SCREEN_PIXEL_SIZE", "TEXTURE_PIXEL_SIZE", "FRAGCOORD")
+vars = PackedStringArray("int", "float", "vec2", "vec3", "vec4", "bool", "void", "COLOR", "VERTEX", "ALBEDO", "NORMAL", "hint_range(0.0,1.0,0.001)", "sin", "cos", "tan", "uniform", "TIME", "UV", "SCREEN_UV", "SCREEN_PIXEL_SIZE", "TEXTURE_PIXEL_SIZE", "FRAGCOORD", "source_color;")
 funcs = PackedStringArray("mod", "fract", "fragment", "vertex", "length", "mix", "clamp", "distance", "pow", "sqrt")
 
 [node name="Load" type="MarginContainer" parent="split/windows"]
@@ -385,16 +424,126 @@ layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
-offset_left = 21.0
-offset_top = 29.0
-offset_right = -18.0
+offset_left = 27.0
+offset_top = 34.0
+offset_right = -30.0
 grow_horizontal = 2
 grow_vertical = 2
 
-[node name="settings" type="VBoxContainer" parent="split/windows/Settings/round/scroll"]
+[node name="Control" type="Control" parent="split/windows/Settings/round/scroll"]
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
+
+[node name="settings" type="VBoxContainer" parent="split/windows/Settings/round/scroll/Control"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="fontSize" type="SpinBox" parent="split/windows/Settings/round/scroll/Control/settings"]
+layout_mode = 2
+min_value = 4.0
+max_value = 96.0
+value = 18.0
+prefix = "fontSize:"
+suffix = "px"
+
+[node name="scale" type="SpinBox" parent="split/windows/Settings/round/scroll/Control/settings"]
+layout_mode = 2
+min_value = 1.0
+max_value = 16.0
+value = 1.0
+prefix = "viewPortScale:"
+
+[node name="autoWrap" type="CheckButton" parent="split/windows/Settings/round/scroll/Control/settings"]
+layout_mode = 2
+text = "textAutoWrap"
+
+[node name="transparent" type="CheckButton" parent="split/windows/Settings/round/scroll/Control/settings"]
+layout_mode = 2
+text = "transparent"
+
+[node name="fps" type="CheckButton" parent="split/windows/Settings/round/scroll/Control/settings"]
+layout_mode = 2
+button_pressed = true
+text = "ShowFPS"
+
+[node name="export" type="HBoxContainer" parent="split/windows/Settings/round/scroll/Control/settings"]
+layout_mode = 2
+
+[node name="exportImage" type="Button" parent="split/windows/Settings/round/scroll/Control/settings/export"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Export Image"
+icon_alignment = 2
+expand_icon = true
+
+[node name="sizex" type="SpinBox" parent="split/windows/Settings/round/scroll/Control/settings/export"]
+layout_mode = 2
+size_flags_horizontal = 3
+min_value = 16.0
+max_value = 2048.0
+value = 512.0
+suffix = "px"
+
+[node name="sizey" type="SpinBox" parent="split/windows/Settings/round/scroll/Control/settings/export"]
+layout_mode = 2
+size_flags_horizontal = 3
+min_value = 16.0
+max_value = 2048.0
+value = 512.0
+suffix = "px"
+
+[node name="save" type="Button" parent="split/windows/Settings/round/scroll/Control/settings"]
+layout_mode = 2
+text = "Save Current Shader"
+icon = ExtResource("11_tmwx0")
+icon_alignment = 2
+expand_icon = true
+
+[node name="ColorRect" type="ColorPickerButton" parent="split/windows/Settings/round/scroll/Control/settings"]
+custom_minimum_size = Vector2(32, 32)
+layout_mode = 2
+
+[node name="fname" type="Panel" parent="split/windows/Settings/round/scroll/Control"]
+visible = false
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="hbox" type="HBoxContainer" parent="split/windows/Settings/round/scroll/Control/fname"]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -178.0
+offset_top = -20.0
+offset_right = 178.0
+offset_bottom = 20.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="nametext" type="LineEdit" parent="split/windows/Settings/round/scroll/Control/fname/hbox"]
+layout_mode = 2
+size_flags_horizontal = 3
+placeholder_text = "file_name_here."
+
+[node name="Button" type="Button" parent="split/windows/Settings/round/scroll/Control/fname/hbox"]
+custom_minimum_size = Vector2(40, 0)
+layout_mode = 2
+icon = ExtResource("14_wtxx2")
+icon_alignment = 1
+expand_icon = true
 
 [node name="Quit" type="MarginContainer" parent="split/windows"]
 visible = false
@@ -501,19 +650,18 @@ offset_right = 158.0
 offset_bottom = 95.0
 text = "fps:99"
 
-[node name="fps2" type="Label" parent="."]
-visible = false
-layout_mode = 0
-offset_left = 37.0
-offset_top = 86.0
-offset_right = 575.0
-offset_bottom = 576.0
-text = "fps:99"
-autowrap_mode = 2
-
 [connection signal="pressed" from="split/viewControl/viewMargin/round/exitFullscreen" to="." method="_on_exit_fullscreen_pressed"]
 [connection signal="pressed" from="split/viewControl/controlMargin/round/controls/Edit" to="." method="_window_requsted" binds= ["Code"]]
 [connection signal="pressed" from="split/viewControl/controlMargin/round/controls/Parameters" to="." method="_window_requsted" binds= ["Parameters"]]
 [connection signal="pressed" from="split/viewControl/controlMargin/round/controls/Load" to="." method="_window_requsted" binds= ["Load"]]
+[connection signal="pressed" from="split/viewControl/controlMargin/round/controls/Settings" to="." method="_window_requsted" binds= ["Settings"]]
 [connection signal="pressed" from="split/viewControl/controlMargin/round/controls/Fullscreen" to="." method="_on_fullscreen_pressed"]
 [connection signal="pressed" from="split/viewControl/controlMargin/round/controls/Quit" to="." method="_window_requsted" binds= ["Quit"]]
+[connection signal="value_changed" from="split/windows/Settings/round/scroll/Control/settings/fontSize" to="." method="_font_size_changed"]
+[connection signal="value_changed" from="split/windows/Settings/round/scroll/Control/settings/scale" to="." method="_on_scale_changed"]
+[connection signal="toggled" from="split/windows/Settings/round/scroll/Control/settings/autoWrap" to="." method="_on_wrap_toggled"]
+[connection signal="toggled" from="split/windows/Settings/round/scroll/Control/settings/transparent" to="." method="_on_transparent_toggled"]
+[connection signal="toggled" from="split/windows/Settings/round/scroll/Control/settings/fps" to="." method="_on_fps_toggled"]
+[connection signal="pressed" from="split/windows/Settings/round/scroll/Control/settings/export/exportImage" to="." method="_on_export_image"]
+[connection signal="pressed" from="split/windows/Settings/round/scroll/Control/settings/save" to="." method="_on_save_pressed"]
+[connection signal="color_changed" from="split/windows/Settings/round/scroll/Control/settings/ColorRect" to="." method="_on_bg_color_changed"]
