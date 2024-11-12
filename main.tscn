@@ -1,4 +1,4 @@
-[gd_scene load_steps=27 format=3 uid="uid://ddcf62f87nau2"]
+[gd_scene load_steps=28 format=3 uid="uid://ddcf62f87nau2"]
 
 [ext_resource type="Shader" path="res://Examples/default.gdshader" id="1_26e3s"]
 [ext_resource type="Script" path="res://main.gd" id="1_jbs8t"]
@@ -13,6 +13,7 @@
 [ext_resource type="Texture2D" uid="uid://ctesp7r7mhc5y" path="res://Resources/close.svg" id="9_05v23"]
 [ext_resource type="Texture2D" uid="uid://biu5jjclt1e67" path="res://Resources/save_file.svg" id="11_tmwx0"]
 [ext_resource type="Script" path="res://code.gd" id="12_14cvk"]
+[ext_resource type="Script" path="res://t_list.gd" id="13_lpuy8"]
 [ext_resource type="Texture2D" uid="uid://b687sw0oublw2" path="res://Resources/check_ok.svg" id="14_wtxx2"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_5xkug"]
@@ -39,7 +40,7 @@ background_mode = 2
 sky = SubResource("Sky_45la5")
 tonemap_mode = 2
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_5lf6u"]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_kk5sy"]
 
 [sub_resource type="SphereMesh" id="SphereMesh_1al7f"]
 
@@ -70,7 +71,7 @@ member_variable_color = Color(1, 0.43, 0.51, 1)
 
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_d1who"]
 
-[node name="main" type="ColorRect" node_paths=PackedStringArray("nodes", "code", "subview", "view", "mesh2d", "mesh3d")]
+[node name="main" type="ColorRect" node_paths=PackedStringArray("nodes", "code", "subview", "view", "mesh2d", "mesh3d", "tlist")]
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
@@ -78,13 +79,14 @@ grow_horizontal = 2
 grow_vertical = 2
 color = Color(0.0705882, 0.0392157, 0.0235294, 1)
 script = ExtResource("1_jbs8t")
-nodes = [NodePath("split/viewControl/controlMargin"), NodePath("split/windows"), NodePath("split/viewControl/viewMargin/round/exitFullscreen"), NodePath("split/windows/Quit/round/vbox/cancel"), NodePath("split/windows/Quit/round/vbox/quit"), NodePath("split/windows/Quit/round/vbox/savenquit"), NodePath("split/windows/Quit/round/Panel/name"), NodePath("split/windows/Quit/round/Panel/name/save"), NodePath("split/windows/Quit/round/Panel"), NodePath("split/windows/Load/round/scroll/list"), NodePath("split/windows/Parameters/round/scroll/paramlist"), NodePath("split/viewControl/controlMargin/round/controls/Edit"), NodePath("split/viewControl/controlMargin/round/controls/Fullscreen"), NodePath("split/windows/Settings/round/scroll/Control/fname"), NodePath("split/windows/Settings/round/scroll/Control/fname/hbox/nametext"), NodePath("split/windows/Settings/round/scroll/Control/settings/export/sizex"), NodePath("split/windows/Settings/round/scroll/Control/settings/export/sizey")]
-code = NodePath("split/windows/Code/round/CodeEdit")
+nodes = [NodePath("split/viewControl/controlMargin"), NodePath("split/windows"), NodePath("split/viewControl/viewMargin/round/exitFullscreen"), NodePath("split/windows/Quit/round/vbox/cancel"), NodePath("split/windows/Quit/round/vbox/quit"), NodePath("split/windows/Quit/round/vbox/savenquit"), NodePath("split/windows/Quit/round/Panel/name"), NodePath("split/windows/Quit/round/Panel/name/save"), NodePath("split/windows/Quit/round/Panel"), NodePath("split/windows/Load/round/scroll/list"), NodePath("split/windows/Parameters/round/scroll/paramlist"), NodePath("split/viewControl/controlMargin/round/controls/Edit"), NodePath("split/viewControl/controlMargin/round/controls/Fullscreen"), NodePath("split/windows/Settings/round/scroll/Control/fname"), NodePath("split/windows/Settings/round/scroll/Control/fname/hbox/nametext"), NodePath("split/windows/Settings/round/scroll/Control/settings/export/sizex"), NodePath("split/windows/Settings/round/scroll/Control/settings/export/sizey"), NodePath("split/windows/LoadTexture/round/scroll/VBox/LineEdit")]
+code = NodePath("split/windows/Code/round/vbox/CodeEdit")
 subview = NodePath("split/viewControl/viewMargin/round/subview")
 view = NodePath("split/viewControl/viewMargin/round/subview/view")
 mesh2d = NodePath("split/viewControl/viewMargin/round/subview/view/2d")
 mesh3d = NodePath("split/viewControl/viewMargin/round/subview/view/v3d/MeshInstance3D")
 th = ExtResource("2_wrm6b")
+tlist = NodePath("split/windows/LoadTexture/round/scroll/VBox/tList")
 
 [node name="split" type="HSplitContainer" parent="."]
 layout_mode = 1
@@ -152,7 +154,7 @@ script = ExtResource("2_dubkx")
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 2.28452)
 
 [node name="MeshInstance3D" type="MeshInstance3D" parent="split/viewControl/viewMargin/round/subview/view/v3d"]
-material_override = SubResource("ShaderMaterial_5lf6u")
+material_override = SubResource("ShaderMaterial_kk5sy")
 mesh = SubResource("SphereMesh_1al7f")
 
 [node name="exitFullscreen" type="Button" parent="split/viewControl/viewMargin/round"]
@@ -313,17 +315,17 @@ layout_mode = 2
 size_flags_vertical = 3
 theme_override_styles/panel = SubResource("StyleBoxFlat_0te51")
 
-[node name="CodeEdit" type="CodeEdit" parent="split/windows/Code/round"]
+[node name="vbox" type="VBoxContainer" parent="split/windows/Code/round"]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
-offset_left = 15.0
-offset_top = 17.0
-offset_right = -15.0
-offset_bottom = -21.0
 grow_horizontal = 2
 grow_vertical = 2
+
+[node name="CodeEdit" type="CodeEdit" parent="split/windows/Code/round/vbox"]
+layout_mode = 2
+size_flags_vertical = 3
 theme_override_font_sizes/font_size = 18
 placeholder_text = "hello world."
 autowrap_mode = 2
@@ -341,9 +343,16 @@ indent_automatic = true
 auto_brace_completion_enabled = true
 auto_brace_completion_highlight_matching = true
 script = ExtResource("12_14cvk")
-keywords = PackedStringArray("uniform", "void", "shader_type", "vec2", "vec3", "vec4", "float", "source_color", "int", "bool", "float", "sin", "cos", "tan")
-vars = PackedStringArray("int", "float", "vec2", "vec3", "vec4", "bool", "void", "COLOR", "VERTEX", "ALBEDO", "NORMAL", "hint_range(0.0,1.0,0.001)", "sin", "cos", "tan", "uniform", "TIME", "UV", "SCREEN_UV", "SCREEN_PIXEL_SIZE", "TEXTURE_PIXEL_SIZE", "FRAGCOORD", "source_color;")
+keywords = PackedStringArray("uniform", "void", "shader_type", "vec2", "vec3", "vec4", "float", "source_color", "int", "bool", "float", "sin", "cos", "tan", "sampler2D", "render_ mode")
+vars = PackedStringArray("int", "float", "vec2", "vec3", "vec4", "bool", "void", "COLOR", "VERTEX", "ALBEDO", "NORMAL", "hint_range(0.0,1.0,0.001)", "sin", "cos", "tan", "uniform", "TIME", "UV", "SCREEN_UV", "SCREEN_PIXEL_SIZE", "TEXTURE_PIXEL_SIZE", "FRAGCOORD", "source_color;", "sampler2D", "repeat_enable", "render_mode", "blend_add", "blend_mix", "blend_sub", "blend_mul", "unshaded", "ambient_light_disabled", "cull_back", "cull_disabled", "cull_front", "diffuse_burley", "diffuse_lambart", "diffuse_toon", "shadow_disabled", "shadow_to_opacity", "specular_disabled", "specular_schlick_ggx", "specular_toon", "wireframe", "depth_draw_always", "depth_draw_never", "depth_draw_opaque", "blend_premul_alpha")
 funcs = PackedStringArray("mod", "fract", "fragment", "vertex", "length", "mix", "clamp", "distance", "pow", "sqrt")
+th = ExtResource("2_wrm6b")
+
+[node name="Button" type="Button" parent="split/windows/Code/round/vbox"]
+layout_mode = 2
+focus_mode = 0
+text = "MENU"
+flat = true
 
 [node name="Load" type="MarginContainer" parent="split/windows"]
 visible = false
@@ -374,6 +383,47 @@ grow_vertical = 2
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
+
+[node name="LoadTexture" type="MarginContainer" parent="split/windows"]
+visible = false
+layout_mode = 2
+size_flags_vertical = 3
+theme_override_constants/margin_left = 8
+theme_override_constants/margin_top = 8
+theme_override_constants/margin_right = 8
+theme_override_constants/margin_bottom = 8
+
+[node name="round" type="Panel" parent="split/windows/LoadTexture"]
+layout_mode = 2
+size_flags_vertical = 3
+theme_override_styles/panel = SubResource("StyleBoxFlat_0te51")
+
+[node name="scroll" type="ScrollContainer" parent="split/windows/LoadTexture/round"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 21.0
+offset_top = 29.0
+offset_right = -18.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="VBox" type="VBoxContainer" parent="split/windows/LoadTexture/round/scroll"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="LineEdit" type="LineEdit" parent="split/windows/LoadTexture/round/scroll/VBox"]
+layout_mode = 2
+placeholder_text = "path to Textures."
+
+[node name="tList" type="ItemList" parent="split/windows/LoadTexture/round/scroll/VBox"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+allow_reselect = true
+script = ExtResource("13_lpuy8")
 
 [node name="Parameters" type="MarginContainer" parent="split/windows"]
 visible = false
@@ -657,6 +707,8 @@ text = "fps:99"
 [connection signal="pressed" from="split/viewControl/controlMargin/round/controls/Settings" to="." method="_window_requsted" binds= ["Settings"]]
 [connection signal="pressed" from="split/viewControl/controlMargin/round/controls/Fullscreen" to="." method="_on_fullscreen_pressed"]
 [connection signal="pressed" from="split/viewControl/controlMargin/round/controls/Quit" to="." method="_window_requsted" binds= ["Quit"]]
+[connection signal="pressed" from="split/windows/Code/round/vbox/Button" to="split/windows/Code/round/vbox/CodeEdit" method="_on_menu_pressed"]
+[connection signal="text_changed" from="split/windows/LoadTexture/round/scroll/VBox/LineEdit" to="split/windows/LoadTexture/round/scroll/VBox/tList" method="_on_path_changed"]
 [connection signal="value_changed" from="split/windows/Settings/round/scroll/Control/settings/fontSize" to="." method="_font_size_changed"]
 [connection signal="value_changed" from="split/windows/Settings/round/scroll/Control/settings/scale" to="." method="_on_scale_changed"]
 [connection signal="toggled" from="split/windows/Settings/round/scroll/Control/settings/autoWrap" to="." method="_on_wrap_toggled"]

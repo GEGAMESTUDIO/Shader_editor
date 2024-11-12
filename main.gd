@@ -8,7 +8,11 @@ var materals:ShaderMaterial
 @export var mesh2d:ColorRect
 @export var mesh3d:MeshInstance3D
 @export var th:Theme
+@export var tlist:ItemList
 func _ready() -> void:
+	OS.request_permissions()
+	DirAccess.make_dir_recursive_absolute(OS.get_system_dir(OS.SYSTEM_DIR_PICTURES))
+	nodes[17].text = OS.get_system_dir(OS.SYSTEM_DIR_PICTURES)+"/"
 	nodes[11].grab_focus()
 	shader = mesh2d.material.shader
 	code.text = shader.code
@@ -49,7 +53,9 @@ func _window_requsted(window:String) -> void:
 	if window == "Load":
 		_update_list()
 	if window == "Parameters":
-		create_parameters(mesh2d.material)
+		if shader.get_mode()==Shader.MODE_CANVAS_ITEM:
+			create_parameters(mesh2d.material)
+		else:create_parameters(mesh3d.material_override)
 func _on_exit_fullscreen_pressed() -> void:
 	nodes[12].grab_focus()
 	nodes[0].show()
@@ -119,11 +125,28 @@ func create_parameters(mat:ShaderMaterial)-> void:
 				var tick:CheckButton=CheckButton.new()
 				hb.add_child(lb)
 				hb.add_child(tick)
+				tick.button_pressed=value if !typeof(value)==0 else false
 				tick.focus_mode=Control.FOCUS_NONE
 				tick.toggled.connect(bool_changed.bind(nam,mat))
 				tick.custom_minimum_size.y=64
 				tick.size_flags_horizontal=Control.SIZE_EXPAND_FILL
 				lb.text=nam
+				nodes[10].add_child(hb)
+			TYPE_INT:
+				var hb:HBoxContainer=HBoxContainer.new()
+				var lb:Label=Label.new()
+				var slider:SpinBox=SpinBox.new()
+				lb.text = nam
+				hb.add_child(lb)
+				hb.add_child(slider)
+				slider.size_flags_horizontal=Control.SIZE_EXPAND_FILL
+				slider.value = value if !typeof(value)==0 else 0
+				slider.step = int(hint_str[2]) if hint == 1 and hint_str.size()==3 else 0
+				slider.min_value = int(hint_str[0]) if hint == 1 and hint_str.size()!=0 else -1
+				slider.max_value = int(hint_str[1]) if hint == 1 and hint_str.size()!=0 else 1
+				slider.theme = th
+				slider.custom_minimum_size.y = 64
+				slider.value_changed.connect(int_changed.bind(nam,mat))
 				nodes[10].add_child(hb)
 			TYPE_FLOAT:
 				var hb:HBoxContainer=HBoxContainer.new()
@@ -135,8 +158,8 @@ func create_parameters(mat:ShaderMaterial)-> void:
 				hb.add_child(vl)
 				hb.add_child(slider)
 				slider.size_flags_horizontal=Control.SIZE_EXPAND_FILL
-				slider.value = 0.5
-				vl.text = str(slider.value)
+				slider.value = float(value) if !typeof(value)==0 else 0.0
+				vl.text = str(slider.value).pad_decimals(4)
 				slider.step = float(hint_str[2]) if hint == 1 and hint_str.size()==3 else 0.1
 				slider.min_value = float(hint_str[0]) if hint == 1 and hint_str.size()!=0 else -1.0
 				slider.max_value = float(hint_str[1]) if hint == 1 and hint_str.size()!=0 else 1.0
@@ -152,6 +175,7 @@ func create_parameters(mat:ShaderMaterial)-> void:
 				picker.custom_minimum_size.y = 64
 				hb.add_child(lb)
 				hb.add_child(picker)
+				picker.color = value if !typeof(value)==0 else Color.WHITE_SMOKE
 				picker.size_flags_horizontal=Control.SIZE_EXPAND_FILL
 				lb.text =nam
 				picker.color_changed.connect(color_changed.bind(nam,mat))
@@ -169,50 +193,38 @@ func create_parameters(mat:ShaderMaterial)-> void:
 				button.size_flags_horizontal=Control.SIZE_EXPAND_FILL
 				hb.add_child(lb)
 				hb.add_child(button)
+				button.pressed.connect(_window_requsted.bind("LoadTexture"))
 				nodes[10].add_child(hb)
+				if tlist.item_selected.get_connections().size()==0:
+					tlist.item_selected.connect(_on_texture_selected.bind(nam,mat))
 func bool_changed(bol:bool,nam:String,mat:ShaderMaterial):
 	mat.set_shader_parameter(nam,bol)
 func float_changed(val:float,nam:String,mat:ShaderMaterial,vl:Label):
 	vl.text = str(val).pad_decimals(4)
 	mat.set_shader_parameter(nam,val)
-func color_changed(col:Color,nam:String,mat:ShaderMaterial):
-	mat.set_shader_parameter(nam,col)
-
-
+func int_changed(val:float,nam:String,mat:ShaderMaterial):
+	mat.set_shader_parameter(nam,val)
+func color_changed(col:Color,nam:String,mat:ShaderMaterial):mat.set_shader_parameter(nam,col)
 func _font_size_changed(value: float) -> void:
 	code.add_theme_font_size_override("font_size",int(value))
-
-
 func _on_wrap_toggled(toggled: bool) -> void:
 	code.wrap_mode = TextEdit.LINE_WRAPPING_BOUNDARY if toggled else TextEdit.LINE_WRAPPING_NONE
-
-
 func _on_save_pressed() -> void:
 	nodes[13].show()
 	nodes[13].get_child(0).get_child(1).pressed.connect(manual_save)
-func manual_save():
-	_save(OS.get_system_dir(OS.SYSTEM_DIR_DOCUMENTS)+"/Shaders/",nodes[14].text)
-
-
+func manual_save():_save(OS.get_system_dir(OS.SYSTEM_DIR_DOCUMENTS)+"/Shaders/",nodes[14].text)
 func _on_export_image() -> void:
 	subview.stretch=false
 	view.size = Vector2(nodes[15].value,nodes[16].value)
 	await RenderingServer.frame_post_draw
 	view.get_texture().get_image().save_png(OS.get_system_dir(OS.SYSTEM_DIR_PICTURES)+"/"+str(hash(randi()))+".png")
 	subview.stretch=true
+func _on_transparent_toggled(toggled: bool) -> void:view.transparent_bg=toggled
+func _on_fps_toggled(toggled: bool) -> void:$fps.visible = toggled
+func _on_scale_changed(value: float) -> void:subview.stretch_shrink=int(value)
+func _on_bg_color_changed(col: Color) -> void:color=col
 
 
-func _on_transparent_toggled(toggled: bool) -> void:
-	view.transparent_bg=toggled
-
-
-func _on_fps_toggled(toggled: bool) -> void:
-	$fps.visible = toggled
-
-
-func _on_scale_changed(value: float) -> void:
-	subview.stretch_shrink=int(value)
-
-
-func _on_bg_color_changed(col: Color) -> void:
-	color=col
+func _on_texture_selected(index: int,nam:String,mat:ShaderMaterial) -> void:
+	mat.set_shader_parameter(nam,ImageTexture.create_from_image(Image.load_from_file(nodes[17].text+tlist.get_item_text(index))))
+	_window_requsted("Parameters")
