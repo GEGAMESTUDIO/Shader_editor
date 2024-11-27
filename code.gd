@@ -1,5 +1,6 @@
 extends CodeEdit
 @export var keywords:PackedStringArray
+@export var consts:PackedStringArray
 @export var vars:PackedStringArray
 @export var funcs:PackedStringArray
 @export var th:Theme
@@ -16,11 +17,10 @@ func _ready() -> void:
 		h.add_keyword_color(k,Color(1.0,0.43,0.51))
 
 func update() -> void:
+	for c in consts:
+		add_code_completion_option(CodeEdit.KIND_CONSTANT,c,c,Color.WHEAT,null,null,0)
 	for v in vars:
 		add_code_completion_option(CodeEdit.KIND_VARIABLE,v,v)
 	for f in funcs:
-		add_code_completion_option(CodeEdit.KIND_VARIABLE,f+"()",f+"()")
+		add_code_completion_option(CodeEdit.KIND_FUNCTION,f+"()",f+"()",Color.CORNFLOWER_BLUE,null,null,0)
 	update_code_completion_options(true)
-
-
-func _on_menu_pressed() -> void:m.show()

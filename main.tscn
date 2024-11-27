@@ -1,4 +1,4 @@
-[gd_scene load_steps=28 format=3 uid="uid://ddcf62f87nau2"]
+[gd_scene load_steps=35 format=3 uid="uid://ddcf62f87nau2"]
 
 [ext_resource type="Shader" path="res://Examples/default.gdshader" id="1_26e3s"]
 [ext_resource type="Script" path="res://main.gd" id="1_jbs8t"]
@@ -15,6 +15,27 @@
 [ext_resource type="Script" path="res://code.gd" id="12_14cvk"]
 [ext_resource type="Script" path="res://t_list.gd" id="13_lpuy8"]
 [ext_resource type="Texture2D" uid="uid://b687sw0oublw2" path="res://Resources/check_ok.svg" id="14_wtxx2"]
+
+[sub_resource type="BoxMesh" id="BoxMesh_53isq"]
+subdivide_width = 16
+subdivide_height = 16
+subdivide_depth = 16
+
+[sub_resource type="SphereMesh" id="SphereMesh_egnr7"]
+
+[sub_resource type="CylinderMesh" id="CylinderMesh_siycp"]
+rings = 8
+
+[sub_resource type="PlaneMesh" id="PlaneMesh_ooc7v"]
+subdivide_width = 32
+subdivide_depth = 32
+
+[sub_resource type="PrismMesh" id="PrismMesh_pyfbc"]
+subdivide_width = 16
+subdivide_height = 16
+subdivide_depth = 16
+
+[sub_resource type="TorusMesh" id="TorusMesh_oafm6"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_5xkug"]
 bg_color = Color(1, 1, 1, 1)
@@ -42,7 +63,7 @@ tonemap_mode = 2
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_kk5sy"]
 
-[sub_resource type="SphereMesh" id="SphereMesh_1al7f"]
+[sub_resource type="SphereMesh" id="SphereMesh_tqmgy"]
 
 [sub_resource type="StyleBoxLine" id="StyleBoxLine_x5xd2"]
 color = Color(0.326422, 0.532406, 1, 1)
@@ -54,6 +75,7 @@ border_width_left = 2
 border_width_top = 2
 border_width_right = 2
 border_width_bottom = 2
+border_color = Color(0, 0, 0, 1)
 corner_radius_top_left = 16
 corner_radius_top_right = 16
 corner_radius_bottom_right = 16
@@ -62,6 +84,13 @@ corner_radius_bottom_left = 16
 [sub_resource type="StyleBoxLine" id="StyleBoxLine_s70eo"]
 color = Color(0.326422, 0.532406, 1, 1)
 thickness = 2
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_rmbxg"]
+bg_color = Color(0, 0, 0, 0.407843)
+corner_radius_top_left = 16
+corner_radius_top_right = 16
+corner_radius_bottom_right = 16
+corner_radius_bottom_left = 16
 
 [sub_resource type="CodeHighlighter" id="CodeHighlighter_k0wjd"]
 number_color = Color(0.63, 0.99, 0.87, 1)
@@ -80,13 +109,14 @@ grow_vertical = 2
 color = Color(0.0705882, 0.0392157, 0.0235294, 1)
 script = ExtResource("1_jbs8t")
 nodes = [NodePath("split/viewControl/controlMargin"), NodePath("split/windows"), NodePath("split/viewControl/viewMargin/round/exitFullscreen"), NodePath("split/windows/Quit/round/vbox/cancel"), NodePath("split/windows/Quit/round/vbox/quit"), NodePath("split/windows/Quit/round/vbox/savenquit"), NodePath("split/windows/Quit/round/Panel/name"), NodePath("split/windows/Quit/round/Panel/name/save"), NodePath("split/windows/Quit/round/Panel"), NodePath("split/windows/Load/round/scroll/list"), NodePath("split/windows/Parameters/round/scroll/paramlist"), NodePath("split/viewControl/controlMargin/round/controls/Edit"), NodePath("split/viewControl/controlMargin/round/controls/Fullscreen"), NodePath("split/windows/Settings/round/scroll/Control/fname"), NodePath("split/windows/Settings/round/scroll/Control/fname/hbox/nametext"), NodePath("split/windows/Settings/round/scroll/Control/settings/export/sizex"), NodePath("split/windows/Settings/round/scroll/Control/settings/export/sizey"), NodePath("split/windows/LoadTexture/round/scroll/VBox/LineEdit")]
-code = NodePath("split/windows/Code/round/vbox/CodeEdit")
+code = NodePath("split/windows/Code/round/CodeEdit")
 subview = NodePath("split/viewControl/viewMargin/round/subview")
 view = NodePath("split/viewControl/viewMargin/round/subview/view")
 mesh2d = NodePath("split/viewControl/viewMargin/round/subview/view/2d")
 mesh3d = NodePath("split/viewControl/viewMargin/round/subview/view/v3d/MeshInstance3D")
 th = ExtResource("2_wrm6b")
 tlist = NodePath("split/windows/LoadTexture/round/scroll/VBox/tList")
+meshs = Array[Mesh]([SubResource("BoxMesh_53isq"), SubResource("SphereMesh_egnr7"), SubResource("CylinderMesh_siycp"), SubResource("PlaneMesh_ooc7v"), SubResource("PrismMesh_pyfbc"), SubResource("TorusMesh_oafm6")])
 
 [node name="split" type="HSplitContainer" parent="."]
 layout_mode = 1
@@ -103,10 +133,10 @@ size_flags_horizontal = 3
 [node name="viewMargin" type="MarginContainer" parent="split/viewControl"]
 layout_mode = 2
 size_flags_vertical = 3
-theme_override_constants/margin_left = 8
-theme_override_constants/margin_top = 8
-theme_override_constants/margin_right = 8
-theme_override_constants/margin_bottom = 8
+theme_override_constants/margin_left = 4
+theme_override_constants/margin_top = 4
+theme_override_constants/margin_right = 4
+theme_override_constants/margin_bottom = 4
 
 [node name="round" type="Panel" parent="split/viewControl/viewMargin"]
 clip_children = 1
@@ -125,7 +155,7 @@ stretch = true
 
 [node name="view" type="SubViewport" parent="split/viewControl/viewMargin/round/subview"]
 handle_input_locally = false
-size = Vector2i(554, 532)
+size = Vector2i(562, 540)
 render_target_update_mode = 4
 
 [node name="2d" type="ColorRect" parent="split/viewControl/viewMargin/round/subview/view"]
@@ -151,11 +181,11 @@ environment = SubResource("Environment_msbsb")
 script = ExtResource("2_dubkx")
 
 [node name="cam" type="Camera3D" parent="split/viewControl/viewMargin/round/subview/view/v3d/piviot"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 2.28452)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 2.6)
 
 [node name="MeshInstance3D" type="MeshInstance3D" parent="split/viewControl/viewMargin/round/subview/view/v3d"]
 material_override = SubResource("ShaderMaterial_kk5sy")
-mesh = SubResource("SphereMesh_1al7f")
+mesh = SubResource("SphereMesh_tqmgy")
 
 [node name="exitFullscreen" type="Button" parent="split/viewControl/viewMargin/round"]
 visible = false
@@ -315,53 +345,52 @@ layout_mode = 2
 size_flags_vertical = 3
 theme_override_styles/panel = SubResource("StyleBoxFlat_0te51")
 
-[node name="vbox" type="VBoxContainer" parent="split/windows/Code/round"]
+[node name="CodeEdit" type="CodeEdit" parent="split/windows/Code/round"]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-
-[node name="CodeEdit" type="CodeEdit" parent="split/windows/Code/round/vbox"]
-layout_mode = 2
 size_flags_vertical = 3
+theme_override_constants/outline_size = 8
 theme_override_font_sizes/font_size = 18
+theme_override_styles/normal = SubResource("StyleBoxFlat_rmbxg")
+theme_override_constants/completion_scroll_width = 16
 placeholder_text = "hello world."
-autowrap_mode = 2
 indent_wrapped_lines = true
 scroll_smooth = true
 scroll_past_end_of_file = true
+minimap_draw = true
+minimap_width = 60
 caret_blink = true
 syntax_highlighter = SubResource("CodeHighlighter_k0wjd")
 highlight_all_occurrences = true
 draw_tabs = true
+symbol_lookup_on_click = true
+line_folding = true
 gutters_draw_line_numbers = true
 gutters_zero_pad_line_numbers = true
+gutters_draw_fold_gutter = true
 code_completion_enabled = true
 indent_automatic = true
 auto_brace_completion_enabled = true
 auto_brace_completion_highlight_matching = true
 script = ExtResource("12_14cvk")
-keywords = PackedStringArray("uniform", "void", "shader_type", "vec2", "vec3", "vec4", "float", "source_color", "int", "bool", "float", "sin", "cos", "tan", "sampler2D", "render_ mode")
-vars = PackedStringArray("int", "float", "vec2", "vec3", "vec4", "bool", "void", "COLOR", "VERTEX", "ALBEDO", "NORMAL", "hint_range(0.0,1.0,0.001)", "sin", "cos", "tan", "uniform", "TIME", "UV", "SCREEN_UV", "SCREEN_PIXEL_SIZE", "TEXTURE_PIXEL_SIZE", "FRAGCOORD", "source_color;", "sampler2D", "repeat_enable", "render_mode", "blend_add", "blend_mix", "blend_sub", "blend_mul", "unshaded", "ambient_light_disabled", "cull_back", "cull_disabled", "cull_front", "diffuse_burley", "diffuse_lambart", "diffuse_toon", "shadow_disabled", "shadow_to_opacity", "specular_disabled", "specular_schlick_ggx", "specular_toon", "wireframe", "depth_draw_always", "depth_draw_never", "depth_draw_opaque", "blend_premul_alpha")
-funcs = PackedStringArray("mod", "fract", "fragment", "vertex", "length", "mix", "clamp", "distance", "pow", "sqrt")
+keywords = PackedStringArray("int", "float", "vec2", "vec3", "vec4", "void", "shader_type", "render_mode", "uniform", "const")
+consts = PackedStringArray("TIME", "PI", "TAU", "E", "UV", "VERTEX", "COLOR", "FRAGCOORD", "SCREEN_PIXEL_SIZE", "TEXTURE", "TEXTURE_PIXEL_SIZE", "SCREEN_UV", "NORMAL_TEXTURE", "NORMAL", "blend_mix", "blend_add", "blend_sub", "blend_mul", "cull_back", "cull_disabled", "unshaded", "wireframe", "diffuse_burley", "diffuse_toon", "specular_toon", "specular_disabled", "TANGENT", "BINORMAL", "POINT_SIZE", "ROUGHNESS", "ALBEDO", "ALPHA", "METALLIC", "SPECULAR", "EMISSION")
+vars = PackedStringArray("sin", "cos", "tan", "int", "float", "void", "vec2", "vec3", "vec4", "const", "uniform", "render_mode")
+funcs = PackedStringArray("abs", "mod", "fract", "length", "distance", "pow", "fragment", "vertex", "clamp", "floor", "celi")
 th = ExtResource("2_wrm6b")
-
-[node name="Button" type="Button" parent="split/windows/Code/round/vbox"]
-layout_mode = 2
-focus_mode = 0
-text = "MENU"
-flat = true
 
 [node name="Load" type="MarginContainer" parent="split/windows"]
 visible = false
 layout_mode = 2
 size_flags_vertical = 3
-theme_override_constants/margin_left = 8
-theme_override_constants/margin_top = 8
-theme_override_constants/margin_right = 8
-theme_override_constants/margin_bottom = 8
+theme_override_constants/margin_left = 4
+theme_override_constants/margin_top = 4
+theme_override_constants/margin_right = 4
+theme_override_constants/margin_bottom = 4
 
 [node name="round" type="Panel" parent="split/windows/Load"]
 layout_mode = 2
@@ -388,10 +417,10 @@ size_flags_vertical = 3
 visible = false
 layout_mode = 2
 size_flags_vertical = 3
-theme_override_constants/margin_left = 8
-theme_override_constants/margin_top = 8
-theme_override_constants/margin_right = 8
-theme_override_constants/margin_bottom = 8
+theme_override_constants/margin_left = 4
+theme_override_constants/margin_top = 4
+theme_override_constants/margin_right = 4
+theme_override_constants/margin_bottom = 4
 
 [node name="round" type="Panel" parent="split/windows/LoadTexture"]
 layout_mode = 2
@@ -429,10 +458,10 @@ script = ExtResource("13_lpuy8")
 visible = false
 layout_mode = 2
 size_flags_vertical = 3
-theme_override_constants/margin_left = 8
-theme_override_constants/margin_top = 8
-theme_override_constants/margin_right = 8
-theme_override_constants/margin_bottom = 8
+theme_override_constants/margin_left = 4
+theme_override_constants/margin_top = 4
+theme_override_constants/margin_right = 4
+theme_override_constants/margin_bottom = 4
 
 [node name="round" type="Panel" parent="split/windows/Parameters"]
 layout_mode = 2
@@ -459,10 +488,10 @@ size_flags_vertical = 3
 visible = false
 layout_mode = 2
 size_flags_vertical = 3
-theme_override_constants/margin_left = 8
-theme_override_constants/margin_top = 8
-theme_override_constants/margin_right = 8
-theme_override_constants/margin_bottom = 8
+theme_override_constants/margin_left = 4
+theme_override_constants/margin_top = 4
+theme_override_constants/margin_right = 4
+theme_override_constants/margin_bottom = 4
 
 [node name="round" type="Panel" parent="split/windows/Settings"]
 layout_mode = 2
@@ -503,12 +532,53 @@ value = 18.0
 prefix = "fontSize:"
 suffix = "px"
 
-[node name="scale" type="SpinBox" parent="split/windows/Settings/round/scroll/Control/settings"]
+[node name="HBox" type="HBoxContainer" parent="split/windows/Settings/round/scroll/Control/settings"]
 layout_mode = 2
-min_value = 1.0
-max_value = 16.0
-value = 1.0
-prefix = "viewPortScale:"
+
+[node name="Label" type="Label" parent="split/windows/Settings/round/scroll/Control/settings/HBox"]
+layout_mode = 2
+text = "ViewportScale:"
+
+[node name="scale" type="OptionButton" parent="split/windows/Settings/round/scroll/Control/settings/HBox"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+selected = 0
+item_count = 5
+popup/item_0/text = "1"
+popup/item_0/id = 1
+popup/item_1/text = "1/2"
+popup/item_1/id = 2
+popup/item_2/text = "1/4"
+popup/item_2/id = 4
+popup/item_3/text = "1/8"
+popup/item_3/id = 8
+popup/item_4/text = "1/16"
+popup/item_4/id = 16
+
+[node name="HBox2" type="HBoxContainer" parent="split/windows/Settings/round/scroll/Control/settings"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="split/windows/Settings/round/scroll/Control/settings/HBox2"]
+layout_mode = 2
+text = "Mesh3D:"
+
+[node name="mesh" type="OptionButton" parent="split/windows/Settings/round/scroll/Control/settings/HBox2"]
+layout_mode = 2
+size_flags_horizontal = 3
+selected = 1
+item_count = 6
+popup/item_0/text = "Box"
+popup/item_1/text = "Sphere"
+popup/item_1/id = 1
+popup/item_2/text = "Cylinder"
+popup/item_2/id = 2
+popup/item_3/text = "Plane"
+popup/item_3/id = 3
+popup/item_4/text = "Prism"
+popup/item_4/id = 4
+popup/item_5/text = "Donut"
+popup/item_5/id = 5
 
 [node name="autoWrap" type="CheckButton" parent="split/windows/Settings/round/scroll/Control/settings"]
 layout_mode = 2
@@ -537,7 +607,7 @@ expand_icon = true
 layout_mode = 2
 size_flags_horizontal = 3
 min_value = 16.0
-max_value = 2048.0
+max_value = 4096.0
 value = 512.0
 suffix = "px"
 
@@ -545,7 +615,7 @@ suffix = "px"
 layout_mode = 2
 size_flags_horizontal = 3
 min_value = 16.0
-max_value = 2048.0
+max_value = 4096.0
 value = 512.0
 suffix = "px"
 
@@ -599,10 +669,10 @@ expand_icon = true
 visible = false
 layout_mode = 2
 size_flags_vertical = 3
-theme_override_constants/margin_left = 8
-theme_override_constants/margin_top = 8
-theme_override_constants/margin_right = 8
-theme_override_constants/margin_bottom = 8
+theme_override_constants/margin_left = 4
+theme_override_constants/margin_top = 4
+theme_override_constants/margin_right = 4
+theme_override_constants/margin_bottom = 4
 
 [node name="round" type="Panel" parent="split/windows/Quit"]
 layout_mode = 2
@@ -700,6 +770,7 @@ offset_right = 158.0
 offset_bottom = 95.0
 text = "fps:99"
 
+[connection signal="gui_input" from="split/viewControl/viewMargin/round/subview" to="split/viewControl/viewMargin/round/subview/view/v3d/piviot" method="_on_subview_gui_input"]
 [connection signal="pressed" from="split/viewControl/viewMargin/round/exitFullscreen" to="." method="_on_exit_fullscreen_pressed"]
 [connection signal="pressed" from="split/viewControl/controlMargin/round/controls/Edit" to="." method="_window_requsted" binds= ["Code"]]
 [connection signal="pressed" from="split/viewControl/controlMargin/round/controls/Parameters" to="." method="_window_requsted" binds= ["Parameters"]]
@@ -707,10 +778,10 @@ text = "fps:99"
 [connection signal="pressed" from="split/viewControl/controlMargin/round/controls/Settings" to="." method="_window_requsted" binds= ["Settings"]]
 [connection signal="pressed" from="split/viewControl/controlMargin/round/controls/Fullscreen" to="." method="_on_fullscreen_pressed"]
 [connection signal="pressed" from="split/viewControl/controlMargin/round/controls/Quit" to="." method="_window_requsted" binds= ["Quit"]]
-[connection signal="pressed" from="split/windows/Code/round/vbox/Button" to="split/windows/Code/round/vbox/CodeEdit" method="_on_menu_pressed"]
 [connection signal="text_changed" from="split/windows/LoadTexture/round/scroll/VBox/LineEdit" to="split/windows/LoadTexture/round/scroll/VBox/tList" method="_on_path_changed"]
 [connection signal="value_changed" from="split/windows/Settings/round/scroll/Control/settings/fontSize" to="." method="_font_size_changed"]
-[connection signal="value_changed" from="split/windows/Settings/round/scroll/Control/settings/scale" to="." method="_on_scale_changed"]
+[connection signal="item_selected" from="split/windows/Settings/round/scroll/Control/settings/HBox/scale" to="." method="_on_scale_item_selected"]
+[connection signal="item_selected" from="split/windows/Settings/round/scroll/Control/settings/HBox2/mesh" to="." method="_on_mesh_selected"]
 [connection signal="toggled" from="split/windows/Settings/round/scroll/Control/settings/autoWrap" to="." method="_on_wrap_toggled"]
 [connection signal="toggled" from="split/windows/Settings/round/scroll/Control/settings/transparent" to="." method="_on_transparent_toggled"]
 [connection signal="toggled" from="split/windows/Settings/round/scroll/Control/settings/fps" to="." method="_on_fps_toggled"]

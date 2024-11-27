@@ -9,6 +9,7 @@ var materals:ShaderMaterial
 @export var mesh3d:MeshInstance3D
 @export var th:Theme
 @export var tlist:ItemList
+@export var meshs:Array[Mesh]
 func _ready() -> void:
 	OS.request_permissions()
 	DirAccess.make_dir_recursive_absolute(OS.get_system_dir(OS.SYSTEM_DIR_PICTURES))
@@ -56,6 +57,8 @@ func _window_requsted(window:String) -> void:
 		if shader.get_mode()==Shader.MODE_CANVAS_ITEM:
 			create_parameters(mesh2d.material)
 		else:create_parameters(mesh3d.material_override)
+		tlist.clear()
+		tlist.update_list()
 func _on_exit_fullscreen_pressed() -> void:
 	nodes[12].grab_focus()
 	nodes[0].show()
@@ -217,14 +220,15 @@ func _on_export_image() -> void:
 	subview.stretch=false
 	view.size = Vector2(nodes[15].value,nodes[16].value)
 	await RenderingServer.frame_post_draw
-	view.get_texture().get_image().save_png(OS.get_system_dir(OS.SYSTEM_DIR_PICTURES)+"/"+str(hash(randi()))+".png")
+	var i:Image=view.get_texture().get_image()
+	i.save_png(OS.get_system_dir(OS.SYSTEM_DIR_PICTURES)+"/"+str(hash(randi()))+".png")
 	subview.stretch=true
 func _on_transparent_toggled(toggled: bool) -> void:view.transparent_bg=toggled
 func _on_fps_toggled(toggled: bool) -> void:$fps.visible = toggled
-func _on_scale_changed(value: float) -> void:subview.stretch_shrink=int(value)
 func _on_bg_color_changed(col: Color) -> void:color=col
-
-
 func _on_texture_selected(index: int,nam:String,mat:ShaderMaterial) -> void:
 	mat.set_shader_parameter(nam,ImageTexture.create_from_image(Image.load_from_file(nodes[17].text+tlist.get_item_text(index))))
 	_window_requsted("Parameters")
+func _on_mesh_selected(index: int) -> void:mesh3d.mesh=meshs[index]
+func _on_scale_item_selected(index: int) -> void:
+	subview.stretch_shrink=%scale.get_item_id(index)
