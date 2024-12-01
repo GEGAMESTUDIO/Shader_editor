@@ -1,0 +1,9 @@
+[gd_resource type="NoiseTexture2D" load_steps=3 format=3 uid="uid://crayvtpcrk5r7"]
+
+[ext_resource type="FastNoiseLite" uid="uid://k6k833yhi5f5" path="res://Resources/nose.tres" id="1_e2cig"]
+
+[sub_resource type="Gradient" id="Gradient_nj5hp"]
+
+[resource]
+color_ramp = SubResource("Gradient_nj5hp")
+noise = ExtResource("1_e2cig")

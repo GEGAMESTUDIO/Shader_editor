@@ -39,6 +39,7 @@ func _save(path:String,fname:String) -> void:
 	file.close()
 	nodes[13].hide()
 func auto_save() -> void:
+	DirAccess.make_dir_recursive_absolute(OS.get_system_dir(OS.SYSTEM_DIR_DOCUMENTS)+"/Shaders/")
 	var  file:FileAccess= FileAccess.open(OS.get_system_dir(OS.SYSTEM_DIR_DOCUMENTS)+"/Shaders/autosave.temp",FileAccess.WRITE)
 	file.store_string(code.text)
 func auto_load() -> void:
@@ -186,9 +187,6 @@ func create_parameters(mat:ShaderMaterial)-> void:
 			TYPE_OBJECT:
 				var hb:HBoxContainer=HBoxContainer.new()
 				var lb:Label=Label.new()
-				var pt:FileDialog=FileDialog.new()
-				pt.file_mode=FileDialog.FILE_MODE_OPEN_FILE
-				pt.access=FileDialog.ACCESS_FILESYSTEM
 				var button:Button=Button.new()
 				lb.text=nam
 				button.text="Load"
@@ -228,7 +226,12 @@ func _on_fps_toggled(toggled: bool) -> void:$fps.visible = toggled
 func _on_bg_color_changed(col: Color) -> void:color=col
 func _on_texture_selected(index: int,nam:String,mat:ShaderMaterial) -> void:
 	mat.set_shader_parameter(nam,ImageTexture.create_from_image(Image.load_from_file(nodes[17].text+tlist.get_item_text(index))))
-	_window_requsted("Parameters")
 func _on_mesh_selected(index: int) -> void:mesh3d.mesh=meshs[index]
-func _on_scale_item_selected(index: int) -> void:
-	subview.stretch_shrink=%scale.get_item_id(index)
+func _on_scale_item_selected(index: int) -> void:subview.stretch_shrink=%scale.get_item_id(index)
+func _on_texture_list_pressed() -> void:
+	_window_requsted("LoadTexture")
+	tlist.clear()
+	tlist.update_list()
+
+func _on_new_tex_pressed() -> void:
+	$noisegen.show()

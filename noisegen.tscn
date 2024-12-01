@@ -1,0 +1,125 @@
+[gd_scene load_steps=7 format=3 uid="uid://b1d2mtju4weuk"]
+
+[ext_resource type="Texture2D" uid="uid://crayvtpcrk5r7" path="res://Resources/noise_tex.tres" id="1_oe1n2"]
+[ext_resource type="Script" path="res://noise.gd" id="2_bnow3"]
+[ext_resource type="FastNoiseLite" path="res://Resources/nose.tres" id="3_wgc7p"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_fnxvp"]
+bg_color = Color(0.0321655, 0.052514, 0.057122, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_1tm8r"]
+bg_color = Color(1, 1, 1, 1)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0, 0, 0, 1)
+corner_radius_top_left = 16
+corner_radius_top_right = 16
+corner_radius_bottom_right = 16
+corner_radius_bottom_left = 16
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_74mmb"]
+bg_color = Color(0.101961, 0.101961, 0.101961, 0.419608)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0, 0, 0, 1)
+corner_radius_top_left = 16
+corner_radius_top_right = 16
+corner_radius_bottom_right = 16
+corner_radius_bottom_left = 16
+
+[node name="Panel" type="Panel"]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_fnxvp")
+
+[node name="HSlider" type="HSplitContainer" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Margin" type="CenterContainer" parent="HSlider"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="Panel" type="Panel" parent="HSlider/Margin"]
+clip_children = 1
+custom_minimum_size = Vector2(512, 512)
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_1tm8r")
+
+[node name="TextureRect" type="TextureRect" parent="HSlider/Margin/Panel"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("1_oe1n2")
+stretch_mode = 5
+
+[node name="Margin0" type="MarginContainer" parent="HSlider"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+theme_override_constants/margin_left = 8
+theme_override_constants/margin_top = 8
+theme_override_constants/margin_right = 8
+theme_override_constants/margin_bottom = 8
+
+[node name="TextureRect" type="Panel" parent="HSlider/Margin0" node_paths=PackedStringArray("params", "tex", "split")]
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_74mmb")
+script = ExtResource("2_bnow3")
+params = NodePath("Margin/Scroll/params")
+tex = NodePath("../../Margin/Panel/TextureRect")
+noise = ExtResource("1_oe1n2")
+noiselib = ExtResource("3_wgc7p")
+split = NodePath("../..")
+
+[node name="Margin" type="MarginContainer" parent="HSlider/Margin0/TextureRect"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/margin_left = 8
+theme_override_constants/margin_top = 8
+theme_override_constants/margin_right = 8
+theme_override_constants/margin_bottom = 8
+
+[node name="Scroll" type="ScrollContainer" parent="HSlider/Margin0/TextureRect/Margin"]
+layout_mode = 2
+follow_focus = true
+
+[node name="params" type="VBoxContainer" parent="HSlider/Margin0/TextureRect/Margin/Scroll"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="HBox" type="HBoxContainer" parent="HSlider/Margin0/TextureRect/Margin/Scroll/params"]
+layout_mode = 2
+
+[node name="save" type="Button" parent="HSlider/Margin0/TextureRect/Margin/Scroll/params/HBox"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "SAVE"
+
+[node name="close" type="Button" parent="HSlider/Margin0/TextureRect/Margin/Scroll/params/HBox"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "CLOSE"
+
+[connection signal="pressed" from="HSlider/Margin0/TextureRect/Margin/Scroll/params/HBox/save" to="HSlider/Margin0/TextureRect" method="_on_save_pressed"]
+[connection signal="pressed" from="HSlider/Margin0/TextureRect/Margin/Scroll/params/HBox/close" to="HSlider/Margin0/TextureRect" method="_on_close_pressed"]
